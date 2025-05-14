@@ -8,9 +8,8 @@ time.sleep(1)
 
 def begin():
   try:
-    amount_rounds = int(input(
-      "Hoeveel rondes wil je spelen?: "))  # <--(try kan niet zonder except)
-  except ValueError:  #<-- creert loop bij andere invoer dan nummers
+    amount_rounds = int(input("Hoeveel rondes wil je spelen?: "))
+  except ValueError:
     amount_rounds = int(input("Voer een getal in a.u.b "))
 
   confirm_rounds = input(
@@ -30,24 +29,36 @@ def begin():
 
   if confirm_rounds == 'j':
     print('Tijd voor BINGO!!!')
-    ready = input('Druk op ENTER voor de eerste bal! ')
+    input('Druk op ENTER voor de eerste ronde! ')
+    
+    all_numbers = list(range(1, 91))
+    random.shuffle(all_numbers)
+    already_called = set()
+    x = 0
 
-    if ready >= '':
-        already_called = []  # <--storage getrokken nummers
-        x = 0  # <--storage aantal rondes
-        while x < amount_rounds:
-            round_numbers = []
-            while len(round_numbers) < 5:
-                next_num = random.randint(1, 91)
-                if next_num not in already_called:
-                    already_called.append(next_num)
-                    round_numbers.append(next_num)
-            print(f"Ronde {x+1}: {', '.join(str(num) for num in round_numbers)}")
-            time.sleep(2)  # <--tijd tussen de ballen
-            x += 1
-        print('Het gekozen aantal rondes is bereikt. ')
-        time.sleep(2)
-        print('Bedankt voor het spelen! ')
+    while x < amount_rounds and len(already_called) + 5 <= 90:
+      print(f"\n--- Ronde {x + 1} ---")
+      round_numbers = []
+
+      while len(round_numbers) < 5:
+        num = all_numbers.pop()
+        if num not in already_called:
+          already_called.add(num)
+          round_numbers.append(num)
+
+      for number in round_numbers:
+        print(f"Nummer: {number}")
+        time.sleep(5)
+
+      x += 1
+
+      if x < amount_rounds:
+        input("\nDruk op ENTER voor de volgende ronde...")
+
+    print('\nHet gekozen aantal rondes is bereikt.')
+    time.sleep(2)
+    print('Bedankt voor het spelen!')
+
 
 
 # command voor het starten van de game/ begin cyclus
